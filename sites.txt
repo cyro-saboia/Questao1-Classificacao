@@ -1,0 +1,8 @@
+MNIST Handwritten digits classification from scratch using Python Numpy.
+https://towardsdatascience.com/mnist-handwritten-digits-classification-from-scratch-using-python-numpy-b08e401c4dab
+
+Least-Square-Classification-for-MNIST
+https://github.com/SunHaoOne/Least-Square-Classification-for-MNIST/blob/main/MNIST%20for%20CPU.py
+
+Classification of MNIST Handwritten Digits and Regression of House Prices through Boston Dataset
+http://saravanan-thirumuruganathan.github.io/cse5334Spring2015/assignments/PA2/soln_PA2_MNIST_Classification_Boston_Regression.html
