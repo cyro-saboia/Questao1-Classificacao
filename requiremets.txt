@@ -1,3 +1,4 @@
 scikit-learn
 gzip-reader
 prettytable
+numpy
