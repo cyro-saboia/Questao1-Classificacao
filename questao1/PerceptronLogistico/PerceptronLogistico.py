@@ -21,7 +21,7 @@ def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
 # Função para treinar o Perceptron Logístico
-def train_perceptron(X, y, learning_rate=0.1, num_epochs = 10):
+def train_perceptron(X, y, learning_rate=0.1, num_epochs = 1):
     num_samples, num_features = X.shape
     num_classes = len(np.unique(y))
     weights = np.zeros((num_classes, num_features))
@@ -63,7 +63,7 @@ train_labels_onehot = np.eye(num_classes)[train_labels]
 test_labels_onehot = np.eye(num_classes)[test_labels]
 
 # Treinar o Perceptron Logístico
-weights = train_perceptron(train_images, train_labels, learning_rate=0.1, num_epochs = 10)
+weights = train_perceptron(train_images, train_labels, learning_rate=0.1, num_epochs = 1)
 
 # Realizar a classificação nos dados de teste
 predicted_labels = predict_perceptron(test_images, weights)
