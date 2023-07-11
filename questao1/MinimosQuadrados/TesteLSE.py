@@ -42,10 +42,7 @@ print('y.shape', y.shape)
 print('X.shape',X.shape)
 print('XT.shape',XT.shape)
 
-C = X@XT
 
-print('X*XT.shape', C.shape)
-
-
-w = y * XT # * (linalg.inv(X * XT))
+#w = y * XT * (linalg.inv(X * XT))()
+w = np.dot(y, np.dot(XT, np.linalg.inv(np.dot(X, XT))))
 print(w.shape)
