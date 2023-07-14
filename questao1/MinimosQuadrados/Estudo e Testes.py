@@ -78,13 +78,35 @@ print('Ypred', Ypred.shape)
 Ypred_q = np.argmax(Ypred, axis=0) 
 print(' ')
 print('CLASSE PELO MAIOR VALOR')
-print(Ypred_q.shape)
+print('Ypred_q.shape', Ypred_q.shape) # Cotém a posição do array onehot como predição para cada um das 10000 imagens
 
 #----------------------------------------------------------------
-max = np.argmax(test_labels, axis=0)
+# VALIDAÇÃO MANUAL DA PREDIÇÃO EM CIMA DOS LABELS DE TESTE
 print(' ')
-print('max',max[198])
+print('Posição',Ypred_q[12]) # Posição no array onehot relevando o label
+print('max',test_labels[:,12])# Validando a Posição no array onehot relevando o label
 
+#----------------------------------------------------------------
+# VERIFICAÇÃO/VALIDAÇÃO DOS LABELS DE TESTES E OS PREDITOS
+test_labels = np.argmax(test_labels, axis=0)
+print(' ')
+print('test_labels',test_labels[:12])
+print('Ypred_q',Ypred_q[:12])
 
-print('Ypred_q', Ypred_q.shape)
+Resultados = np.vstack((test_labels[:12], Ypred_q[:12]))  # Saida desejada e predita lado-a-lado em linha
+print(' ')
+print('Resultados.shape', Resultados.shape)
+print('Resultados.shape.T', Resultados.T.shape)
+print(' ')
+print('Resultados', Resultados[:12])
+print('Resultados.T', Resultados.T[:12])
 
+#----------------------------------------------------------------
+# PREPARAÇÃO DOS RESULTADOS
+
+Resultados = np.vstack((test_labels, Ypred_q))  # Saida desejada e predita lado-a-lado em linha
+Resultados = Resultados.T
+
+Erros = Resultados[:12, 0] - Resultados[:12, 1]  # Coluna 1 - Coluna 2
+print(' ')
+print('Erros', Erros)
