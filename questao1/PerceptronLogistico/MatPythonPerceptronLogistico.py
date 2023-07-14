@@ -1,25 +1,21 @@
-import gzip
-import struct
 import numpy as np
 import matplotlib.pyplot as plt
 
 # Função para carregar o conjunto de dados MNIST
 def load_mnist(image_file, label_file):
-    with gzip.open(label_file, 'rb') as lbpath:
-        magic, n = struct.unpack('>II', lbpath.read(8))
+    with open(label_file, 'rb') as lbpath:
+        lbpath.read(8)
         labels = np.frombuffer(lbpath.read(), dtype=np.uint8)
 
-    with gzip.open(image_file, 'rb') as imgpath:
-        magic, num, rows, cols = struct.unpack('>IIII', imgpath.read(16))
+    with open(image_file, 'rb') as imgpath:
+        imgpath.read(16)
         images = np.frombuffer(imgpath.read(), dtype=np.uint8).reshape(len(labels), 784)
 
     return images, labels
 
-# Carregar o conjunto de dados de treinamento
-train_images, train_labels = load_mnist('train-images-idx3-ubyte.gz', 'train-labels-idx1-ubyte.gz')
-
-# Carregar o conjunto de dados de teste
-test_images, test_labels = load_mnist('t10k-images-idx3-ubyte.gz', 't10k-labels-idx1-ubyte.gz')
+# LEITURA DOS DADOS
+train_images, train_labels = load_mnist('train-images.idx3-ubyte', 'train-labels.idx1-ubyte')
+test_images, test_labels = load_mnist('t10k-images.idx3-ubyte', 't10k-labels.idx1-ubyte')
 
 # Passo 1: Carregar banco de dados
 X = train_images.T

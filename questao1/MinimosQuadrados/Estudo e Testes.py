@@ -1,5 +1,4 @@
 import numpy as np
-import struct
 
 # Função para carregar o conjunto de dados MNIST
 def load_mnist(image_file, label_file):
