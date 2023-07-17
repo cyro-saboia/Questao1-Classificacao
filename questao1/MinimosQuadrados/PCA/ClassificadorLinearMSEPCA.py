@@ -12,53 +12,65 @@ def load_mnist(image_file, label_file):
 
     return images, labels
 
+# Função para calcular o PCA com normalização dos autovalores
+def pca(X, num_components):
+    # Centralizar os dados
+    mean_vec = np.mean(X, axis=0)
+    X_centered = X - mean_vec
+    
+    # Calcular a matriz de covariância
+    cov_matrix = np.dot(X_centered.T, X_centered) / X_centered.shape[0]
+    
+    # Calcular os autovalores e autovetores da matriz de covariância
+    eigenvalues, eigenvectors = np.linalg.eigh(cov_matrix)
+    
+    # Normalizar os autovalores
+    normalized_eigenvalues = eigenvalues / np.sum(eigenvalues)
+    
+    # Ordenar os autovetores de forma decrescente de acordo com os autovalores normalizados
+    sorted_indices = np.argsort(normalized_eigenvalues)[::-1]
+    sorted_eigenvectors = eigenvectors[:, sorted_indices]
+    
+    # Selecionar os principais componentes
+    selected_eigenvectors = sorted_eigenvectors[:, :num_components]
+    
+    # Projetar os dados nos principais componentes
+    projected_data = np.dot(X_centered, selected_eigenvectors)
+    
+    return projected_data, mean_vec, selected_eigenvectors
+
 # LEITURA DOS DADOS
 train_images, train_labels = load_mnist('train-images.idx3-ubyte', 'train-labels.idx1-ubyte')
 test_images, test_labels = load_mnist('t10k-images.idx3-ubyte', 't10k-labels.idx1-ubyte')
 
-# print('ORIGINAL')
-# print('train_images',train_images.shape)
-# print('train_labels',train_labels.shape)
-# print('test_images',test_images.shape)
-# print('test_labels',test_labels.shape)
+# Aplicar PCA aos dados de treinamento
+train_images_pca, _, _ = pca(train_images, num_components=30)
 
+# Aplicar PCA aos dados de teste
+test_images_pca, _, _ = pca(test_images, num_components=30)
 
-Xtr = train_images.T
+# np.set_printoptions(threshold=np.inf)
+# print(train_images_pca[:1])
+# print(test_images_pca[:1])
+
+Xtr = train_images_pca.T
 Dtr = np.eye(10)[train_labels].T
 
-Xts = test_images.T
+Xts = test_images_pca.T
 Dts = np.eye(10)[test_labels].T
-
-# print('ONEHOT')
-# print('Xtr',Xtr.shape)
-# print('Dtr',Dtr.shape)
-# print('Xts',Xts.shape)
-# print('Dts',Dts.shape)
 
 # Parametros do classificador
 Xtr = np.vstack((-np.ones((1, Xtr.shape[1])), Xtr))  # Adiciona uma linha de -1's
 Xts = np.vstack((-np.ones((1, Xts.shape[1])), Xts))  # Adiciona uma linha de -1's
 
-# print('BIAS')
-# print('Xtr',Xtr.shape)
-# print('Xts',Xts.shape)
-
-# print('Xtr',Xtr.shape)
-# print('Dtr',Dtr.shape)
-# print('Xts',Xts.shape)
-# print('Dts',Dts.shape)
-
 # Calcular pesos
 W = np.dot(Dtr, np.dot(Xtr.T, np.linalg.pinv(np.dot(Xtr, Xtr.T))))
 
-# # Predição
+# Predição
 Ypred = np.dot(W, Xts)  # Saida como numeros reais
 Ypred_q = np.argmax(Ypred, axis=0)  # Encontrar a classe predita com maior valor
 
-# # print(np.argmax(Dts, axis=0)[:10])
-# # print(Ypred_q[:10])
-
-# # Taxas de acerto/erro
+# Taxas de acerto/erro
 Resultados = np.vstack((np.argmax(Dts, axis=0), Ypred_q))  # Saida desejada e predita lado-a-lado
 Resultados = Resultados.T  # Transpor a matriz Resultados
 Erros = Resultados[:, 0] - Resultados[:, 1]  # Coluna 1 - Coluna 2
@@ -77,7 +89,6 @@ print("Nacertos:", Nacertos)
 print("Perros_pos:", Perros_pos)
 print("Perros_neg:", Perros_neg)
 print("Pacertos:", Pacertos)
-
 
 # Calcular a acurácia
 accuracy = np.mean(Ypred_q == test_labels)
