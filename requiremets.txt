@@ -1,5 +1,4 @@
 scikit-learn
-gzip-reader
-prettytable
 numpy
 matplotlib
+tensorflow
