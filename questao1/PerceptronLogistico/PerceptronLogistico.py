@@ -73,4 +73,4 @@ print("Acurácia:", accuracy)
 #Resultados:
 # 1 época: 0,7719
 # 30 épocas: 0,8055
-# 50 épocas: 
+# 50 épocas: 0.8055
